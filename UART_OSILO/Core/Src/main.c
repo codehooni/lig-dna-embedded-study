@@ -65,7 +65,7 @@ static void MX_USB_OTG_FS_PCD_Init(void);
  * 1바이트를 비트 단위 문자열로 만들어 줌. 예) 'A' ->
  *   "A 0x41 bin:01000001 wire:0 10000010 1\r\n"
  *   - bin  : 사람이 읽는 순서 (MSB -> LSB)
- *   - wire : 실제 선(PC6)에 나가는 순서 = Start(0) + LSB부터 8비트 + Stop(1)
+ *   - wire : 실제 선(PG14)에 나가는 순서 = Start(0) + LSB부터 8비트 + Stop(1)
  *            -> 오실로스코프 화면 왼쪽부터 보이는 순서와 같음
  * 반환값: 만든 문자열 길이
  */
@@ -146,7 +146,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    HAL_UART_Transmit(&huart6, &ch, 1, 100);                  // USART6 (PC6) 9600bps -> 오실로스코프
+    HAL_UART_Transmit(&huart6, &ch, 1, 100);                  // USART6 (PG14 = D1) 9600bps -> 오실로스코프
     HAL_UART_Transmit(&huart3, (uint8_t *)msg, len, 100);     // USART3 (ST-LINK VCP) 115200bps -> PC 시리얼 모니터
     HAL_Delay(10);
   }
