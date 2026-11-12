@@ -7,4 +7,4 @@ LIG D&A 부트캠프 임베디드 스터디에서 진행한 STM32 **NUCLEO-F446Z
 | 폴더 | 내용 | 핵심 |
 |---|---|---|
 | [pull-up-pull-down](pull-up-pull-down/) | 버튼 입력(PF13)을 읽어 LED(PF12) 제어, 입력값을 시리얼로 출력 | GPIO 입력 / 풀업·풀다운 저항, `printf` → USART3 |
-| [UART_OSILO](UART_OSILO/) | USART6(PG14, 9600bps)로 `'A'`를 반복 전송해 오실로스코프로 파형 관찰, 같은 데이터를 비트 단위 문자열로 USART3(115200bps)에 출력 | UART 프레임(Start/Data LSB first/Stop) |
+| [UART_OSILO](UART_OSILO/) | 레퍼런스 매뉴얼(RM0390)과 데이터시트를 보고 USART6(PG14, 9600bps) 레지스터 기대값을 계산한 뒤, 디버거로 실제 레지스터 값과 비교 | RCC / GPIO AF / USART BRR·CR1·SR 레지스터 분석 |
