@@ -1,6 +1,6 @@
-# my-embedded
+# LIG D&A 부트캠프 · Embedded Study
 
-STM32 **NUCLEO-F446ZE** 실습 프로젝트 모음입니다. (STM32CubeMX + CMake + Ninja + Arm GNU Toolchain)
+LIG D&A 부트캠프 임베디드 스터디에서 진행한 STM32 **NUCLEO-F446ZE** 실습 모음입니다. (STM32CubeMX + CMake + Ninja + Arm GNU Toolchain)
 
 ## 프로젝트
 
