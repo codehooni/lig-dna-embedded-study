@@ -1,0 +1,12 @@
+# Build output (regenerate with: cmake --preset Debug && cmake --build --preset Debug)
+build/
+**/build/
+
+# IDE / OS
+.vs/
+*.code-workspace
+.DS_Store
+Thumbs.db
+
+# Packaged extensions
+*.vsix
