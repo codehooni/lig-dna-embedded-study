@@ -4,13 +4,17 @@ LIG D&A 부트캠프 임베디드 스터디에서 진행한 STM32 **NUCLEO-F446Z
 
 ## 참고 문서
 
+[![DB3171 다운로드](https://img.shields.io/badge/PDF-DB3171%20NUCLEO--144%20Data%20Brief-red?style=for-the-badge&logo=adobeacrobatreader)](https://github.com/codehooni/lig-dna-embedded-study/raw/main/docs/DB_nucleo-f446ze.pdf)
+
+**DB3171 (Data Brief)**: NUCLEO-144 보드의 특징과 사양을 한눈에 보는 요약본
+
 [![UM1974 다운로드](https://img.shields.io/badge/PDF-UM1974%20NUCLEO--144%20User%20Manual-red?style=for-the-badge&logo=adobeacrobatreader)](https://github.com/codehooni/lig-dna-embedded-study/raw/main/docs/um1974-stm32-nucleo144-boards-mb1137-stmicroelectronics.pdf)
 
-STM32 Nucleo-144 보드 사용자 매뉴얼(UM1974): 핀맵, 커넥터(CN7–CN12), 점퍼 설정
+**UM1974 (User Manual)**: 보드 핀맵, 커넥터(CN7–CN12), 점퍼 설정 등 하드웨어 사용법
 
 [![RM0390 다운로드](https://img.shields.io/badge/PDF-RM0390%20STM32F446xx%20Reference%20Manual-red?style=for-the-badge&logo=adobeacrobatreader)](https://github.com/codehooni/lig-dna-embedded-study/raw/main/docs/rm0390-stm32f446xx-advanced-armbased-32bit-mcus-stmicroelectronics.pdf)
 
-STM32F446xx 레퍼런스 매뉴얼(RM0390): RCC, GPIO, USART 등 주변장치 레지스터 설명
+**RM0390 (Reference Manual)**: STM32F446 칩 내부 주변장치(RCC, GPIO, USART 등)의 레지스터 설명
 
 ### 핀맵 (UM1974 발췌)
 
