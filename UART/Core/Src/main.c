@@ -61,41 +61,6 @@ static void MX_USB_OTG_FS_PCD_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-/*
- * 1바이트를 비트 단위 문자열로 만들어 줌. 예) 'A' ->
- *   "A 0x41 bin:01000001 wire:0 10000010 1\r\n"
- *   - bin  : 사람이 읽는 순서 (MSB -> LSB)
- *   - wire : 실제 선(PG14)에 나가는 순서 = Start(0) + LSB부터 8비트 + Stop(1)
- *            -> 오실로스코프 화면 왼쪽부터 보이는 순서와 같음
- * 반환값: 만든 문자열 길이
- */
-static uint16_t make_bit_string(uint8_t data, char *buf)
-{
-  static const char hex[] = "0123456789ABCDEF";
-  uint16_t n = 0;
-
-  buf[n++] = (data >= 0x20 && data < 0x7F) ? (char)data : '.';   // 출력 가능한 문자만
-  buf[n++] = ' ';
-  buf[n++] = '0'; buf[n++] = 'x';
-  buf[n++] = hex[data >> 4];
-  buf[n++] = hex[data & 0x0F];
-
-  const char *t1 = " bin:";
-  while (*t1) buf[n++] = *t1++;
-  for (int i = 7; i >= 0; i--)                 // MSB -> LSB
-    buf[n++] = ((data >> i) & 1) ? '1' : '0';
-
-  const char *t2 = " wire:0 ";                 // Start 비트
-  while (*t2) buf[n++] = *t2++;
-  for (int i = 0; i < 8; i++)                  // LSB -> MSB (실제 전송 순서)
-    buf[n++] = ((data >> i) & 1) ? '1' : '0';
-  buf[n++] = ' ';
-  buf[n++] = '1';                              // Stop 비트
-
-  buf[n++] = '\r';
-  buf[n++] = '\n';
-  return n;
-}
 
 /* USER CODE END 0 */
 
@@ -137,18 +102,14 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-
-  uint8_t ch = 'A';                 // 오실로스코프용: 1바이트만 (파형 보기 깔끔하게)
-  char msg[64];                     // 시리얼 모니터용: 비트 단위 문자열
-  uint16_t len = make_bit_string(ch, msg);
   while (1)
   {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    HAL_UART_Transmit(&huart6, &ch, 1, 100);                  // USART6 (PG14 = D1) 9600bps -> 오실로스코프
-    HAL_UART_Transmit(&huart3, (uint8_t *)msg, len, 100);     // USART3 (ST-LINK VCP) 115200bps -> PC 시리얼 모니터
-    HAL_Delay(10);
+    uint8_t ch = 'A';
+    HAL_UART_Transmit(&huart6, &ch, 1, HAL_MAX_DELAY);
+    HAL_Delay(1000);
   }
   /* USER CODE END 3 */
 }
