@@ -2,6 +2,18 @@
 
 LIG D&A 부트캠프 임베디드 스터디에서 진행한 STM32 **NUCLEO-F446ZE** 실습 모음입니다. (STM32CubeMX + CMake + Ninja + Arm GNU Toolchain)
 
+## 참고 문서
+
+[![UM1974 다운로드](https://img.shields.io/badge/PDF-UM1974%20NUCLEO--144%20User%20Manual-red?style=for-the-badge&logo=adobeacrobatreader)](https://github.com/codehooni/lig-dna-embedded-study/raw/main/docs/um1974-stm32-nucleo144-boards-mb1137-stmicroelectronics.pdf)
+
+STM32 Nucleo-144 보드 사용자 매뉴얼(UM1974): 핀맵, 커넥터(CN7–CN12), 점퍼 설정
+
+### 핀맵 (UM1974 발췌)
+
+| NUCLEO-F446ZE / F722ZE (실습 보드) | NUCLEO-F207ZG / F429ZI / F746ZG 등 |
+|:---:|:---:|
+| <img src="docs/nucleo-f446ze-pinout.png" width="420"> | <img src="docs/nucleo-f429zi-pinout.png" width="420"> |
+
 ## 프로젝트
 
 | 폴더 | 내용 | 핵심 |
