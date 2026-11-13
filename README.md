@@ -8,6 +8,10 @@ LIG D&A 부트캠프 임베디드 스터디에서 진행한 STM32 **NUCLEO-F446Z
 
 STM32 Nucleo-144 보드 사용자 매뉴얼(UM1974): 핀맵, 커넥터(CN7–CN12), 점퍼 설정
 
+[![RM0390 다운로드](https://img.shields.io/badge/PDF-RM0390%20STM32F446xx%20Reference%20Manual-red?style=for-the-badge&logo=adobeacrobatreader)](https://github.com/codehooni/lig-dna-embedded-study/raw/main/docs/rm0390-stm32f446xx-advanced-armbased-32bit-mcus-stmicroelectronics.pdf)
+
+STM32F446xx 레퍼런스 매뉴얼(RM0390): RCC, GPIO, USART 등 주변장치 레지스터 설명
+
 ### 핀맵 (UM1974 발췌)
 
 | NUCLEO-F446ZE / F722ZE (실습 보드) | NUCLEO-F207ZG / F429ZI / F746ZG 등 |
