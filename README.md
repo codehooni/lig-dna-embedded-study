@@ -10,7 +10,7 @@ LIG D&A 부트캠프 임베디드 스터디에서 진행한 STM32 실습 모음�
 | 레지스터 주소, 비트, 장치 동작 방식 | Reference Manual (RM0390) |
 | Cortex-M4 코어 (NVIC, SysTick) | Programming Manual (PM0214) |
 | 칩 자체의 알려진 버그 | Errata sheet (ES0298) |
-| 보드 회로 (어느 핀이 어디에 연결됐나), 보드 핀맵, 커넥터(CN7–CN12), 점퍼 설정 | 보드 User Manual (UM1974), 회로도 |
+| 보드 회로 (어느 핀이 어디에 연결됐나), 보드 핀맵, 커넥터(CN7–CN12), 점퍼 설정 | 보드 User Manual (UM1974) |
 
 [![DS10693 다운로드](https://img.shields.io/badge/PDF-DS10693%20STM32F446xx%20Datasheet-red?style=for-the-badge&logo=adobeacrobatreader)](https://github.com/codehooni/lig-dna-embedded-study/raw/main/docs/ds10693-stm32f446xx-datasheet.pdf)
 [![RM0390 다운로드](https://img.shields.io/badge/PDF-RM0390%20STM32F446xx%20Reference%20Manual-red?style=for-the-badge&logo=adobeacrobatreader)](https://github.com/codehooni/lig-dna-embedded-study/raw/main/docs/rm0390-stm32f446xx-advanced-armbased-32bit-mcus-stmicroelectronics.pdf)
