@@ -36,12 +36,37 @@
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
+#define PCLK2_HZ   84000000UL
+#define BAUDRATE   9600UL
 
+#define MY_AHB1_BASE 0x40020000UL
+
+#define MY_RCC_BASE (MY_AHB1_BASE + 0x3800UL)
+#define MY_RCC_AHB1ENR (*(volatile uint32_t *) (MY_RCC_BASE + 0x30UL)) // GPIOGEN : bit 6
+#define MY_RCC_APB2ENR (*(volatile uint32_t *) (MY_RCC_BASE + 0x44UL)) // USART6EN : bit 5
+
+#define MY_GPIOG_BASE (MY_AHB1_BASE + 0x1800UL)
+#define MY_GPIOG_MODER (*(volatile uint32_t *) (MY_GPIOG_BASE + 0x00UL)) // PG14: [29:28] = 10 (AF)
+#define MY_GPIOG_AFRH (*(volatile uint32_t *) (MY_GPIOG_BASE + 0x24UL)) // PG14: [27:24] = 1000 (AF8)
+
+#define MY_APB2_BASE 0x40010000UL
+
+#define MY_USART6_BASE (MY_APB2_BASE + 0x1400UL)
+#define MY_USART6_SR (*(volatile uint32_t *) (MY_USART6_BASE + 0x00UL)) // TXE: 7, TC: 6, RXNE: 5
+#define MY_USART6_DR (*(volatile uint32_t *) (MY_USART6_BASE + 0x04UL)) // DR[8:0]
+#define MY_USART6_BRR (*(volatile uint32_t *) (MY_USART6_BASE + 0x08UL)) // Mantissa[15:4], Fraction[3:0]
+#define MY_USART6_CR1 (*(volatile uint32_t *) (MY_USART6_BASE + 0x0CUL)) // UE: 13, TE: 3, RE: 2
+
+#define MY_RCC_AHB1ENR_GPIOGEN  (1U << 6)
+#define MY_RCC_APB2ENR_USART6EN (1U << 5)
+#define MY_USART6_SR_TXE        (1U << 7)
+#define MY_USART6_SR_TC         (1U << 6)
+#define MY_USART6_CR1_UE        (1U << 13)
+#define MY_USART6_CR1_TE        (1U << 3)
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
 UART_HandleTypeDef huart3;
-UART_HandleTypeDef huart6;
 
 PCD_HandleTypeDef hpcd_USB_OTG_FS;
 
@@ -53,7 +78,6 @@ PCD_HandleTypeDef hpcd_USB_OTG_FS;
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART3_UART_Init(void);
-static void MX_USART6_UART_Init(void);
 static void MX_USB_OTG_FS_PCD_Init(void);
 /* USER CODE BEGIN PFP */
 
@@ -94,9 +118,39 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_USART3_UART_Init();
-  MX_USART6_UART_Init();
   MX_USB_OTG_FS_PCD_Init();
   /* USER CODE BEGIN 2 */
+    // Clock On
+    MY_RCC_AHB1ENR |= MY_RCC_AHB1ENR_GPIOGEN;
+    MY_RCC_APB2ENR |= MY_RCC_APB2ENR_USART6EN;
+
+    // PG14 Setting
+    MY_GPIOG_MODER &= ~(0b11U << 28);
+    MY_GPIOG_MODER |=  (0b10U << 28);
+
+    MY_GPIOG_AFRH  &= ~(0b1111U << 24);
+    MY_GPIOG_AFRH  |=  (0b1000U << 24);
+
+    // UART Setting
+
+    // 모두 계산
+    // float USARTDIV = (float) PCLK2_HZ / (16.0f * BAUDRATE);
+    // uint32_t DIV_Mantissa = (uint32_t) USARTDIV;
+    // uint32_t DIV_Fraction = (uint32_t) ((USARTDIV - DIV_Mantissa) * 16.0f + 0.5f);
+    // if(DIV_Fraction >= 16) {
+    //   DIV_Fraction = 0;
+    //   DIV_Mantissa++;
+    // }
+    // MY_USART6_BRR = (DIV_Mantissa << 4) | DIV_Fraction;
+
+    // 쉬운 계산
+    MY_USART6_BRR = (PCLK2_HZ + BAUDRATE / 2) / BAUDRATE;
+
+    // 하드 코딩
+    // MY_USART6_BRR = 0x222E;
+    MY_USART6_CR1 |= MY_USART6_CR1_UE;   // UE
+    MY_USART6_CR1 |= MY_USART6_CR1_TE;    // TE
+
 
   /* USER CODE END 2 */
 
@@ -107,8 +161,12 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+    
+    // Transmission
     uint8_t ch = 'A';
-    HAL_UART_Transmit(&huart6, &ch, 1, HAL_MAX_DELAY);
+    while(!(MY_USART6_SR & MY_USART6_SR_TXE));
+    MY_USART6_DR = ch;
+    while(!(MY_USART6_SR & MY_USART6_SR_TC));
     HAL_Delay(1000);
   }
   /* USER CODE END 3 */
@@ -190,39 +248,6 @@ static void MX_USART3_UART_Init(void)
   /* USER CODE BEGIN USART3_Init 2 */
 
   /* USER CODE END USART3_Init 2 */
-
-}
-
-/**
-  * @brief USART6 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_USART6_UART_Init(void)
-{
-
-  /* USER CODE BEGIN USART6_Init 0 */
-
-  /* USER CODE END USART6_Init 0 */
-
-  /* USER CODE BEGIN USART6_Init 1 */
-
-  /* USER CODE END USART6_Init 1 */
-  huart6.Instance = USART6;
-  huart6.Init.BaudRate = 9600;
-  huart6.Init.WordLength = UART_WORDLENGTH_8B;
-  huart6.Init.StopBits = UART_STOPBITS_1;
-  huart6.Init.Parity = UART_PARITY_NONE;
-  huart6.Init.Mode = UART_MODE_TX_RX;
-  huart6.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  huart6.Init.OverSampling = UART_OVERSAMPLING_16;
-  if (HAL_UART_Init(&huart6) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN USART6_Init 2 */
-
-  /* USER CODE END USART6_Init 2 */
 
 }
 
