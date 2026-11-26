@@ -71,7 +71,7 @@ VS Code에서 **`UART` 폴더를 워크스페이스로 엽니다.** 확장은 `C
 
    ![VS Code 시리얼 모니터 출력 (COM3, 9600bps)](docs/images/serial-monitor-output.png)
 
-   마지막 줄의 `Closed serial port COM3 due to disconnection`은 다시 굽느라 ST-LINK가 리셋되면서 포트가 끊긴 것입니다 (아래 참고). 포트 번호(COM3)는 PC마다 다릅니다.
+   포트 번호(COM3)는 PC마다 다릅니다.
 
 **포트가 헷갈릴 때**
 - `표준 Bluetooth에서 직렬 링크(COM4)` 같은 포트는 **블루투스 가상 포트**이니 고르면 안 됩니다.
