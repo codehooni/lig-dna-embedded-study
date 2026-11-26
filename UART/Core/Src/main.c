@@ -36,33 +36,33 @@
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
-#define PCLK2_HZ   84000000UL
+#define PCLK1_HZ   16000000UL   // HSI 16MHz, APB1 /1 (SystemClock_Config 안 씀, USART3는 APB1 버스)
 #define BAUDRATE   9600UL
 
 #define MY_AHB1_BASE 0x40020000UL
 
 #define MY_RCC_BASE (MY_AHB1_BASE + 0x3800UL)
-#define MY_RCC_AHB1ENR (*(volatile uint32_t *) (MY_RCC_BASE + 0x30UL)) // GPIOGEN : bit 6
-#define MY_RCC_APB2ENR (*(volatile uint32_t *) (MY_RCC_BASE + 0x44UL)) // USART6EN : bit 5
+#define MY_RCC_AHB1ENR (*(volatile uint32_t *) (MY_RCC_BASE + 0x30UL)) // GPIODEN : bit 3
+#define MY_RCC_APB1ENR (*(volatile uint32_t *) (MY_RCC_BASE + 0x40UL)) // USART3EN : bit 18
 
-#define MY_GPIOG_BASE (MY_AHB1_BASE + 0x1800UL)
-#define MY_GPIOG_MODER (*(volatile uint32_t *) (MY_GPIOG_BASE + 0x00UL)) // PG14: [29:28] = 10 (AF)
-#define MY_GPIOG_AFRH (*(volatile uint32_t *) (MY_GPIOG_BASE + 0x24UL)) // PG14: [27:24] = 1000 (AF8)
+#define MY_GPIOD_BASE (MY_AHB1_BASE + 0x0C00UL)
+#define MY_GPIOD_MODER (*(volatile uint32_t *) (MY_GPIOD_BASE + 0x00UL)) // PD8: [17:16] = 10 (AF)
+#define MY_GPIOD_AFRH (*(volatile uint32_t *) (MY_GPIOD_BASE + 0x24UL)) // PD8: [3:0] = 0111 (AF7)
 
-#define MY_APB2_BASE 0x40010000UL
+#define MY_APB1_BASE 0x40000000UL
 
-#define MY_USART6_BASE (MY_APB2_BASE + 0x1400UL)
-#define MY_USART6_SR (*(volatile uint32_t *) (MY_USART6_BASE + 0x00UL)) // TXE: 7, TC: 6, RXNE: 5
-#define MY_USART6_DR (*(volatile uint32_t *) (MY_USART6_BASE + 0x04UL)) // DR[8:0]
-#define MY_USART6_BRR (*(volatile uint32_t *) (MY_USART6_BASE + 0x08UL)) // Mantissa[15:4], Fraction[3:0]
-#define MY_USART6_CR1 (*(volatile uint32_t *) (MY_USART6_BASE + 0x0CUL)) // UE: 13, TE: 3, RE: 2
+#define MY_USART3_BASE (MY_APB1_BASE + 0x4800UL)
+#define MY_USART3_SR (*(volatile uint32_t *) (MY_USART3_BASE + 0x00UL)) // TXE: 7, TC: 6, RXNE: 5
+#define MY_USART3_DR (*(volatile uint32_t *) (MY_USART3_BASE + 0x04UL)) // DR[8:0]
+#define MY_USART3_BRR (*(volatile uint32_t *) (MY_USART3_BASE + 0x08UL)) // Mantissa[15:4], Fraction[3:0]
+#define MY_USART3_CR1 (*(volatile uint32_t *) (MY_USART3_BASE + 0x0CUL)) // UE: 13, TE: 3, RE: 2
 
-#define MY_RCC_AHB1ENR_GPIOGEN  (1U << 6)
-#define MY_RCC_APB2ENR_USART6EN (1U << 5)
-#define MY_USART6_SR_TXE        (1U << 7)
-#define MY_USART6_SR_TC         (1U << 6)
-#define MY_USART6_CR1_UE        (1U << 13)
-#define MY_USART6_CR1_TE        (1U << 3)
+#define MY_RCC_AHB1ENR_GPIODEN  (1U << 3)
+#define MY_RCC_APB1ENR_USART3EN (1U << 18)
+#define MY_USART3_SR_TXE        (1U << 7)
+#define MY_USART3_SR_TC         (1U << 6)
+#define MY_USART3_CR1_UE        (1U << 13)
+#define MY_USART3_CR1_TE        (1U << 3)
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -102,54 +102,55 @@ int main(void)
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  HAL_Init();
+  // HAL_Init();
 
   /* USER CODE BEGIN Init */
 
   /* USER CODE END Init */
 
   /* Configure the system clock */
-  SystemClock_Config();
+  // SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
 
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
-  MX_GPIO_Init();
-  MX_USART3_UART_Init();
-  MX_USB_OTG_FS_PCD_Init();
+  // MX_GPIO_Init();
+  // MX_USART3_UART_Init();
+  // MX_USB_OTG_FS_PCD_Init();
   /* USER CODE BEGIN 2 */
     // Clock On
-    MY_RCC_AHB1ENR |= MY_RCC_AHB1ENR_GPIOGEN;
-    MY_RCC_APB2ENR |= MY_RCC_APB2ENR_USART6EN;
+    MY_RCC_AHB1ENR |= MY_RCC_AHB1ENR_GPIODEN;
+    MY_RCC_APB1ENR |= MY_RCC_APB1ENR_USART3EN;
 
-    // PG14 Setting
-    MY_GPIOG_MODER &= ~(0b11U << 28);
-    MY_GPIOG_MODER |=  (0b10U << 28);
+    // PD8 Setting (USART3_TX → ST-LINK 가상 COM 포트)
+    MY_GPIOD_MODER &= ~(0b11U << 16);
+    MY_GPIOD_MODER |=  (0b10U << 16);
 
-    MY_GPIOG_AFRH  &= ~(0b1111U << 24);
-    MY_GPIOG_AFRH  |=  (0b1000U << 24);
+    MY_GPIOD_AFRH  &= ~(0b1111U << 0);
+    MY_GPIOD_AFRH  |=  (0b0111U << 0);
 
     // UART Setting
+    MY_USART3_CR1 = 0;   // 설정 중에는 끄기
 
     // 모두 계산
-    // float USARTDIV = (float) PCLK2_HZ / (16.0f * BAUDRATE);
+    // float USARTDIV = (float) PCLK1_HZ / (16.0f * BAUDRATE);
     // uint32_t DIV_Mantissa = (uint32_t) USARTDIV;
     // uint32_t DIV_Fraction = (uint32_t) ((USARTDIV - DIV_Mantissa) * 16.0f + 0.5f);
     // if(DIV_Fraction >= 16) {
     //   DIV_Fraction = 0;
     //   DIV_Mantissa++;
     // }
-    // MY_USART6_BRR = (DIV_Mantissa << 4) | DIV_Fraction;
+    // MY_USART3_BRR = (DIV_Mantissa << 4) | DIV_Fraction;
 
     // 쉬운 계산
-    MY_USART6_BRR = (PCLK2_HZ + BAUDRATE / 2) / BAUDRATE;
+    MY_USART3_BRR = PCLK1_HZ / BAUDRATE;   // = 1666 = 0x682
 
     // 하드 코딩
-    // MY_USART6_BRR = 0x222E;
-    MY_USART6_CR1 |= MY_USART6_CR1_UE;   // UE
-    MY_USART6_CR1 |= MY_USART6_CR1_TE;    // TE
+    // MY_USART3_BRR = 0x682;
+    MY_USART3_CR1 |= MY_USART3_CR1_UE;   // UE
+    MY_USART3_CR1 |= MY_USART3_CR1_TE;   // TE
 
 
   /* USER CODE END 2 */
@@ -164,10 +165,10 @@ int main(void)
     
     // Transmission
     uint8_t ch = 'A';
-    while(!(MY_USART6_SR & MY_USART6_SR_TXE));
-    MY_USART6_DR = ch;
-    while(!(MY_USART6_SR & MY_USART6_SR_TC));
-    HAL_Delay(1000);
+    while(!(MY_USART3_SR & MY_USART3_SR_TXE));
+    MY_USART3_DR = ch;
+    while(!(MY_USART3_SR & MY_USART3_SR_TC));
+    for (volatile uint32_t i = 0; i < 1600000; i++);
   }
   /* USER CODE END 3 */
 }

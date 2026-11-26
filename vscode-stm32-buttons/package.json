@@ -1,0 +1,57 @@
+{
+  "name": "stm32-build-flash",
+  "displayName": "STM32 Build & Flash Buttons",
+  "description": "상태바에 Build / Flash 버튼을 추가합니다 (CMake preset + STM32_Programmer_CLI).",
+  "version": "0.1.1",
+  "publisher": "local",
+  "license": "MIT",
+  "engines": { "vscode": "^1.80.0" },
+  "categories": ["Other"],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      { "command": "stm32bf.build", "title": "STM32: Build", "icon": "$(tools)" },
+      { "command": "stm32bf.flash", "title": "STM32: Build & Flash", "icon": "$(zap)" },
+      { "command": "stm32bf.clean", "title": "STM32: Clean Rebuild" },
+      { "command": "stm32bf.selectPreset", "title": "STM32: Select Build Preset" }
+    ],
+    "keybindings": [
+      { "command": "stm32bf.build", "key": "ctrl+alt+b" },
+      { "command": "stm32bf.flash", "key": "ctrl+alt+f" }
+    ],
+    "menus": {
+      "editor/title": [
+        { "command": "stm32bf.build", "group": "navigation@100" },
+        { "command": "stm32bf.flash", "group": "navigation@101" }
+      ]
+    },
+    "configuration": {
+      "title": "STM32 Build & Flash",
+      "properties": {
+        "stm32bf.preset": {
+          "type": "string",
+          "default": "Debug",
+          "description": "CMakePresets.json 의 configure/build preset 이름"
+        },
+        "stm32bf.programmerPath": {
+          "type": "string",
+          "default": "",
+          "description": "STM32_Programmer_CLI.exe 경로. 비워두면 PATH 와 %LOCALAPPDATA%\\stm32cube\\bundles\\programmer 에서 자동 탐색"
+        },
+        "stm32bf.connectArgs": {
+          "type": "string",
+          "default": "port=SWD",
+          "description": "-c 뒤에 붙는 연결 옵션 (예: 'port=SWD freq=4000 reset=HWrst')"
+        },
+        "stm32bf.verify": {
+          "type": "boolean",
+          "default": true,
+          "description": "굽고 나서 verify (-v)"
+        }
+      }
+    }
+  }
+}
